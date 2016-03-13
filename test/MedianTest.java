@@ -10,112 +10,100 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class MedianTest {
 
-	@Test
-	public void isEvenMedian1234() throws Exception {
-		Set<Integer> group = getList(1, 2, 3, 4);
-		Assert.assertFalse(new Main().isMedian(group, 1));
-		Assert.assertTrue(new Main().isMedian(group, 2));
-		Assert.assertFalse(new Main().isMedian(group, 3));
-		Assert.assertFalse(new Main().isMedian(group, 4));
-	}
 
-	@Test
-	public void isEvenMedian1224() throws Exception {
-		Set<Integer> group = getList(1, 2, 2, 4);
-		Assert.assertFalse(new Main().isMedian(group, 1));
-		Assert.assertTrue(new Main().isMedian(group, 2));
-		Assert.assertFalse(new Main().isMedian(group, 4));
-	}
+    @Test
+    public void testContainer() throws Exception {
+        OrderedContainer c = new OrderedContainer().add(1,2,3,4,5);
+        Assert.assertEquals(3, c.getMedian());
+    }
 
-	@Test
-	public void isEvenMedian1124() throws Exception {
-		Set<Integer> group = getList(1, 1, 2, 4);
-		Assert.assertFalse(new Main().isMedian(group, 1));
-		Assert.assertTrue(new Main().isMedian(group, 2));
-		Assert.assertFalse(new Main().isMedian(group, 4));
-	}
+    @Test
+    public void test1234() throws Exception {
+        OrderedContainer c = new OrderedContainer().add(1,2,3,4);
+        Assert.assertEquals(2, c.getMedian());
+    }
+    @Test
+    public void test11144() throws Exception {
+        OrderedContainer c = new OrderedContainer().add(1,1,1,4,4);
+        Assert.assertEquals(1, c.getMedian());
+    }
 
-	@Test
-	public void isEvenMedian1244() throws Exception {
-		Set<Integer> group = getList(1, 2, 4, 4);
-		Assert.assertFalse(new Main().isMedian(group, 1));
-		Assert.assertTrue(new Main().isMedian(group, 2));
-		Assert.assertFalse(new Main().isMedian(group, 4));
-	}
 
-	@Test
-	public void isEvenMedian1144() throws Exception {
-		Set<Integer> group = getList(1, 1, 4, 4);
-		Assert.assertTrue(new Main().isMedian(group, 1));
-		Assert.assertFalse(new Main().isMedian(group, 4));
-	}
+    @Test
+    public void test1224() throws Exception {
+        OrderedContainer c = new OrderedContainer().add(1,2,2,4);
+        Assert.assertEquals(2, c.getMedian());
+    }
 
-	@Test
-	public void isEvenMedian1111() throws Exception {
-		Set<Integer> group = getList(1, 1, 1, 1);
-		Assert.assertTrue(new Main().isMedian(group, 1));
-	}
 
-	@Test
-	public void isEvenMedian1121() throws Exception {
-		Set<Integer> group = getList(1, 1, 2, 1);
-		Assert.assertTrue(new Main().isMedian(group, 1));
-		Assert.assertFalse(new Main().isMedian(group, 2));
-	}
+    @Test
+    public void test1124() throws Exception {
+        OrderedContainer c = new OrderedContainer().add(1,1,2,4);
+        Assert.assertEquals(1, c.getMedian());
+    }
 
-	@Test
-	public void isEvenMedian11() throws Exception {
-		Set<Integer> group = getList(1, 1);
-		Assert.assertTrue(new Main().isMedian(group, 1));
-	}
 
-	@Test
-	public void isEvenMedian12() throws Exception {
-		Set<Integer> group = getList(1, 2);
-		Assert.assertTrue(new Main().isMedian(group, 1));
-		Assert.assertFalse(new Main().isMedian(group, 2));
-	}
+    @Test
+    public void test1244() throws Exception {
+        OrderedContainer c = new OrderedContainer().add(1,2,4,4);
+        Assert.assertEquals(2, c.getMedian());
+    }
 
-	@Test
-	public void isOddMedian123() throws Exception {
-		Set<Integer> group = getList(1, 2, 3);
-		Assert.assertFalse(new Main().isMedian(group, 1));
-		Assert.assertTrue(new Main().isMedian(group, 2));
-		Assert.assertFalse(new Main().isMedian(group, 3));
-	}
+    @Test
+    public void test1144() throws Exception {
+        OrderedContainer c = new OrderedContainer().add(1,1,4,4);
+        Assert.assertEquals(1, c.getMedian());
+    }
 
-	@Test
-	public void isOddMedian112() throws Exception {
-		Set<Integer> group = getList(1, 1, 2);
-		Assert.assertTrue(new Main().isMedian(group, 1));
-		Assert.assertFalse(new Main().isMedian(group, 2));
-	}
+    @Test
+    public void test1111() throws Exception {
+        OrderedContainer c = new OrderedContainer().add(1,1,1,1);
+        Assert.assertEquals(1, c.getMedian());
+    }
+    @Test
+    public void test1121() throws Exception {
+        OrderedContainer c = new OrderedContainer().add(1,1,2,1);
+        Assert.assertEquals(1, c.getMedian());
+    }
 
-	@Test
-	public void isOddMedian122() throws Exception {
-		Set<Integer> group = getList(1, 2, 2);
-		Assert.assertTrue(new Main().isMedian(group, 1));
-		Assert.assertFalse(new Main().isMedian(group, 2));
-	}
+    @Test
+    public void test11() throws Exception {
+        OrderedContainer c = new OrderedContainer().add(1,1);
+        Assert.assertEquals(1, c.getMedian());
+    }
 
-	@Test
-	public void isOddMedian12345() throws Exception {
-		Set<Integer> group = getList(1, 2, 3, 4, 5);
-		Assert.assertFalse(new Main().isMedian(group, 1));
-		Assert.assertFalse(new Main().isMedian(group, 2));
-		Assert.assertTrue(new Main().isMedian(group, 3));
-		Assert.assertFalse(new Main().isMedian(group, 4));
-		Assert.assertFalse(new Main().isMedian(group, 5));
-	}
+    @Test
+    public void test12() throws Exception {
+        OrderedContainer c = new OrderedContainer().add(1,2);
+        Assert.assertEquals(1, c.getMedian());
+    }
+    @Test
+    public void test123() throws Exception {
+        OrderedContainer c = new OrderedContainer().add(1,2,3);
+        Assert.assertEquals(2, c.getMedian());
+    }
+    @Test
+    public void test112() throws Exception {
+        OrderedContainer c = new OrderedContainer().add(1,1,2);
+        Assert.assertEquals(1, c.getMedian());
+    }
+    @Test
+    public void test122() throws Exception {
+        OrderedContainer c = new OrderedContainer().add(1,2,2);
+        Assert.assertEquals(2, c.getMedian());
+    }
 
-	@Test
-	public void isOddMedian12445() throws Exception {
-		Set<Integer> group = getList(1, 2, 4, 4, 5);
-		Assert.assertFalse(new Main().isMedian(group, 1));
-		Assert.assertTrue(new Main().isMedian(group, 2));
-		Assert.assertFalse(new Main().isMedian(group, 4));
-		Assert.assertFalse(new Main().isMedian(group, 5));
-	}
+
+    @Test
+    public void test12345() throws Exception {
+        OrderedContainer c = new OrderedContainer().add(1,2,3,4,5);
+        Assert.assertEquals(3, c.getMedian());
+    }
+    @Test
+    public void test12445() throws Exception {
+        OrderedContainer c = new OrderedContainer().add(1,2,4,4,5);
+        Assert.assertEquals(4, c.getMedian());
+    }
 
 	private Set<Integer> getList(final int... i) {
 		ArrayList<Integer> arrayList = new ArrayList<Integer>() {

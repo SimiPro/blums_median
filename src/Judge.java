@@ -53,7 +53,7 @@ public class Judge {
 	}
 	
 	@Test 
-	public void test() throws IOException {
+	public void test() throws Exception {
 		
 		// redirect io streams
 		PrintStream oldOut = System.out;

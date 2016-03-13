@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-class Main {
+class Mainsss {
 
 	StreamTokenizer in;
 	PrintWriter out;
@@ -19,9 +19,6 @@ class Main {
 	boolean oj = System.getProperty("LOCALE") != null;
 	List<List<Set<Integer>>> z;
 
-	public static void main(String[] args) throws IOException {
-		new Main().run();
-	}
 
 	int nextInt() throws IOException {
 		in.nextToken();
@@ -60,7 +57,7 @@ class Main {
 					y.add(x);
 					x = new HashSet<>(5);
 				}
-				x.add(Integer.valueOf((int) in.nval));
+				x.add((int) in.nval);
 				j++;
 				break;
 			case StreamTokenizer.TT_EOL:
