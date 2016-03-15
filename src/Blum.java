@@ -18,6 +18,8 @@ public class Blum {
 		int n = end - start;
 		if (n <= 5) {
 			switch (n) {
+			case 5:
+				return getMedian(A, 2, start, end);
 			case 4:
 			case 3:
 				return getMedian(A, 1, start, end);
@@ -28,47 +30,64 @@ public class Blum {
 		}
 		// build group of 5
 		// A[0..4], A[4...9]...
+		// after that all of our medians are at the front
 		List<Integer> mediansOfGroups = new ArrayList<>();
+		int storeIndex = 0;
 		for (int j = start; j < end; j += 5) {
 			if (j + 4 < end) {
-				mediansOfGroups.add(getMedian(A, 2, j, j + 5));
+				int median = getMedian(A, 2, j, j + 5);
+				Collections.swap(A, median, storeIndex);
+				mediansOfGroups.add(median);
+				storeIndex++;
 			} else {
 				int r = end % 5;
 				switch (r) {
 				case 4:
-					mediansOfGroups.add(getMedian(A, 1, j, j + 3));
+					int median = getMedian(A, 1, j, j + 3);
+					mediansOfGroups.add(median);
+					Collections.swap(A, median, storeIndex);
+					storeIndex++;
 					break;
 				case 3:
-					mediansOfGroups.add(getMedian(A, 1, j, j + 2));
+					int median2 = getMedian(A, 1, j, j + 2);
+					mediansOfGroups.add(median2);
+					Collections.swap(A, median2, storeIndex);
+					storeIndex++;
 					break;
 				case 2:
-					mediansOfGroups.add(getMedian(A, 0, j, j + 1));
+					int median3 = getMedian(A, 0, j, j + 1);
+					mediansOfGroups.add(median3);
+					Collections.swap(A, median3, storeIndex);
+					storeIndex++;
 					break;
 				case 1:
-					mediansOfGroups.add(getMedian(A, 0, j, j + 0));
+					int median4 = getMedian(A, 0, j, j + 0);
+					mediansOfGroups.add(median4);
+					Collections.swap(A, median4, storeIndex);
+					storeIndex++;
 					break;
 				}
 			}
 		}
-		int roundUp = mediansOfGroups.size() % 5 == 0 ? mediansOfGroups.size() / 5 : mediansOfGroups.size() / 5 + 1;
-		int median = blum(mediansOfGroups, roundUp / 2, 0, mediansOfGroups.size());
-		int pivotIndex = -1;
-		pivotIndex = getPivotIndex(A, median);
-		pivotIndex = shuffle(A, pivotIndex, start, end); // now every element
-															// left to the
+		n = end - start;
+		int roundUp = n % 5 == 0 ? n / 5 : n / 5 + 1;
+		int median = blum(A, roundUp / 2, 0, storeIndex);
+		// pivotIndex = getPivotIndex(A, median);
+		// what we get back here is the index of our median of
+		median = shuffle(A, median, start, end); // now every
+													// element
+													// left to the
 		// pivot is
 		// smaller and every element right is greater
-		if (k == pivotIndex) {
-			return pivotIndex;
-		} else if (k < pivotIndex) {
-			median = blum(A, k, start, pivotIndex);
-			pivotIndex = getPivotIndex(A, median);
-		} else {
-			median = blum(A, k - pivotIndex, pivotIndex + 1, end - pivotIndex);
-			pivotIndex = getPivotIndex(A, median);
+		int kl = start + k - end;
+		if (median > k) {
+			return blum(A, k, start, median);
+			// pivotIndex = getPivotIndex(A, median);
+		} else if (k > median) {
+			return blum(A, k - (median - start), median + 1, end);
+			// pivotIndex = getPivotIndex(A, median);
 		}
-
-		return pivotIndex;
+		return start + k;
 	}
 
 	private int getPivotIndex(List<Integer> A, int median) {
@@ -111,6 +130,6 @@ public class Blum {
 				}
 			}
 		} while (swapped);
-		return A.get(start + k);
+		return start + k;
 	}
 }

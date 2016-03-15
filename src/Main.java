@@ -6,32 +6,33 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StreamTokenizer;
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-class Mainsss {
+public class Main {
 
 	StreamTokenizer in;
-	PrintWriter out;
+	static PrintWriter out;
 	Reader reader;
 	boolean oj = System.getProperty("LOCALE") != null;
 	List<List<Set<Integer>>> z;
-
 
 	int nextInt() throws IOException {
 		in.nextToken();
 		return (int) in.nval;
 	}
 
+	public static void main(String[] args) throws IOException {
+		new Main().run();
+	}
+
 	void run() throws IOException {
 		reader = oj ? new FileReader("public.in") : new InputStreamReader(System.in);
 		in = new StreamTokenizer(new BufferedReader(reader));
-		in.eolIsSignificant(true);
 		out = new PrintWriter(new OutputStreamWriter(System.out));
 
-		solve();
+		read();
 		out.flush();
 	}
 
@@ -39,127 +40,120 @@ class Mainsss {
 		return in.nextToken();
 	}
 
-	void solve() throws IOException {
+	void read() throws IOException {
 		nextToken();
 		int t = (int) in.nval;
-		int i = 0;
-		int j = 0;
-		Set<Integer> x = new HashSet<>(5);
-		List<Set<Integer>> y = new ArrayList<>();
-		z = new ArrayList<>(t);
 
-		while (i < t) {
-			int nextToken = nextToken();
-			switch (nextToken) {
-			case StreamTokenizer.TT_NUMBER:
-				if (j == 5) {
-					j = 0;
-					y.add(x);
-					x = new HashSet<>(5);
-				}
-				x.add((int) in.nval);
-				j++;
-				break;
-			case StreamTokenizer.TT_EOL:
-				if (!x.isEmpty()) {
-					y.add(x);
-					x = new HashSet<>(5);
-					j = 0;
-				}
-				z.add(y);
-				y = new ArrayList<>();
-				i++;
-				break;
+		for (int j = 0; j < t; j++) {
+			nextToken();
+			int lineCount = (int) in.nval;
+			int[] A = new int[lineCount];
+			for (int i = 0; i < lineCount; i++) {
+				nextToken();
+				A[i] = (int) in.nval;
 			}
-		}
-		solvez();
-	}
-
-	boolean isEvenMedian(Set<Integer> group, Integer currElement) {
-		int greater = 0;
-		int smaller = 0;
-
-		for (Integer c : group) {
-			if (c != currElement) {
-				if (currElement > c) {
-					smaller++;
-				} else if (currElement < c) {
-					greater++;
-				}
-			}
-		}
-
-		if (smaller + 1 == greater) {
-			return true;
-		}
-		return false;
-
-	}
-
-	void solvez() {
-		for (List<Set<Integer>> row : z) {
-			// foreach group we get the median
-			// if 1 element the smallest one
-			// if 2 elements the smaller one
-			// if 3 elements the middle one is the median
-			// if 4 elements the second smallest element is the median
-			// if 5 elements the middle one is the median
-			Set<Integer> medians = new HashSet<>();
-			for (Set<Integer> group : row) {
-				for (Integer integer : group) {
-					if (isMedian(group, integer)) {
-						out.print(integer);
-						medians.add(integer);
-						break;
-					}
-				}
-			}
-
+			out.print(findMedian(A));
+			out.println();
+			out.flush();
 		}
 	}
 
-	// TODO: Maybe check this so that we have here no for loop. should be easy
-	// this method works for every odd sized group
-	boolean isOddMedian(Set<Integer> group, Integer currElement) {
-		int greater = 0;
-		int smaller = 0;
+	public static int findMedian(int A[]) {
+		int k = A.length % 2 == 0 ? A.length / 2 : A.length / 2 + 1;
+		return findMedian(A, k, 0, A.length - 1);
+	}
 
-		for (Integer c : group) {
-			if (c != currElement) {
-				;
-				if (currElement > c) {
-					smaller++;
-				} else if (currElement < c) {
-					greater++;
-				}
-			}
+	private static int findMedian(int[] A, int k, int start, int end) {
+		if (start == end) {
+			return A[start];
 		}
-
-		if (greater == smaller) {
-			return true;
+		int median = shuffle(A, start, end);
+		int lenght = median - start + 1;
+		if (lenght == k) {
+			return A[median];
+		}
+		if (lenght > k) {
+			return findMedian(A, k, start, median - 1);
 		} else {
-			return false;
+			return findMedian(A, k - lenght, median + 1, end);
 		}
 	}
 
-	double readNumber() throws IOException {
-		if (in.ttype == StreamTokenizer.TT_NUMBER) {
-			return in.nval;
-		}
-		throw new IllegalStateException("Number expected. Found: " + in.ttype);
+	static void swap(int[] A, int a, int b) {
+		int temp = A[a];
+		A[a] = A[b];
+		A[b] = temp;
 	}
 
-	String readWord() throws IOException {
-		if (in.ttype == StreamTokenizer.TT_WORD) {
-			return in.sval;
+	private static int shuffle(int[] A, int start, int end) {
+		int pivot = getPivot(true, A, start, end);
+		int pivotIndex = 0;
+		int lefti = start;
+		for (int i = start; i <= end; i++) {
+			if (A[i] == pivot) {
+				pivotIndex = i;
+			}
 		}
-		throw new IllegalStateException("Word expected. Found: " + in.ttype);
+		swap(A, pivotIndex, end);
+		for (int i = start; i < end; i++) {
+			if (A[i] <= pivot) {
+				swap(A, i, lefti);
+				lefti++;
+			}
+		}
+		swap(A, lefti, end);
+		return lefti;
 	}
 
-	public boolean isMedian(Set<Integer> group, int i) {
-		if (group.size() % 2 == 0) {
-			return isEvenMedian(group, i);
+	private static int getPivot(boolean first, int[] A, int start, int end) {
+		if (end - start + 1 < 5) {
+			Arrays.sort(A);
+			int mediansOfMedians = -0;
+			switch (end - start + 1) {
+			case 5:
+				mediansOfMedians = A[start + 2];
+				break;
+			case 4:
+			case 3:
+				mediansOfMedians = A[start + 1];
+				break;
+			case 2:
+			case 1:
+				mediansOfMedians = A[start + 0];
+			}
+			out.print(mediansOfMedians + " ");
+			if (first) {
+				out.print(mediansOfMedians + " ");
+			}
+			return mediansOfMedians;
 		}
-		return isOddMedian(group, i);
+		int temp[] = null;
+		int mediansSize = (int) Math.ceil((double) (end - start + 1) / 5); // A.length
+																			// %
+																			// 5
+																			// ==
+																			// 0
+																			// ?
+		// A.length / 5 :
+		// A.length / 5 + 1;
+		int medians[] = new int[mediansSize];
+		int mIndex = 0;
+
+		while (start <= end) {
+			temp = new int[Math.min(5, end - start + 1)]; // end - start + 1 > 5
+															// ? 5 : end - start
+															// + 1
+			for (int i = 0; i < temp.length && start <= end; i++) {
+				temp[i] = A[start];
+				start++;
+			}
+			Arrays.sort(temp);
+			medians[mIndex] = temp[temp.length / 2];
+			out.print(medians[mIndex] + " ");
+			mIndex++;
+		}
+		return getPivot(false, medians, 0, medians.length - 1); // medians of
+																// median
 	}
+
 }

@@ -169,4 +169,74 @@ public class MedianTest {
 			Assert.assertEquals(A.get(k), median);
 		}
 	}
+
+	@Test
+	public void testBlum2() {
+		List<Integer> A = getList();
+		int k = A.size() % 2 == 0 ? A.size() / 2 - 1 : A.size() / 2;
+
+		int blum = new Blum(A).blum(k);
+		Integer median = A.get(blum);
+		for (Integer integer : A) {
+			System.out.print(integer + " ");
+		}
+		System.out.println("WITH median: " + median + " And key: " + blum);
+
+		Collections.sort(A);
+		for (Integer integer : A) {
+			System.out.print(integer + " ");
+		}
+		System.out.println("WITH median: " + A.get(k) + " And key: " + k);
+		Assert.assertEquals(A.get(k), median);
+	}
+
+	@Test
+	public void testBlum3() {
+		for (int j = 0; j < 10; j++) {
+			int[] A = new int[1444];
+			for (int i = 0; i < 44; i++) {
+				A[i] = (new Random().nextInt(100));
+			}
+			int k = A.length % 2 == 0 ? A.length / 2 - 1 : A.length / 2;
+
+			int median = Main.findMedian(A);
+			for (int integer : A) {
+				System.out.print(integer + " ");
+			}
+			System.out.println("WITH median: " + median + " And key: ");
+
+			Arrays.sort(A);
+			for (int integer : A) {
+				System.out.print(integer + " ");
+			}
+			System.out.println("WITH median: " + A[k] + " And key: " + k);
+			Assert.assertEquals(A[k], median);
+		}
+	}
+
+	List<Integer> getList() {
+		List<Integer> A = new ArrayList<>();
+		A.add(5);
+		A.add(2);
+		A.add(17);
+		A.add(13);
+		A.add(14);
+		A.add(17);
+		A.add(19);
+		A.add(14);
+		A.add(18);
+		A.add(2);
+		A.add(4);
+		A.add(8);
+		A.add(2);
+		A.add(5);
+		A.add(0);
+		A.add(6);
+		A.add(13);
+		A.add(4);
+		A.add(12);
+		A.add(18);
+		A.add(10);
+		return A;
+	}
 }

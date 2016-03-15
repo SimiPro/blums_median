@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by simipro on 13.03.16.
  */
-class Main {
+class Mainz {
 
 	public static void main(String[] args) throws Exception {
 		new Main().run();
